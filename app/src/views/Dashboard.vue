@@ -184,7 +184,9 @@
             <center-panel />
             <tour-control
               v-if="this.$store.state.config.tourEnabled"
-              style="position: absolute; bottom: 20px; left: 20px; z-index: 999"/>
+              style="position: absolute; bottom: 20px; left: 20px; z-index: 999;"
+              :style="$vuetify.breakpoint.xsOnly && 'width: 85vw; bottom: -30px;'"
+              />
           </v-col>
         </v-row>
       </v-container>

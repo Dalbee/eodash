@@ -270,7 +270,7 @@ export default {
           };
         }
         if (this.$store.state.config.tourEnabled) {
-          this.flyToBounds(mutation.payload);
+          this.flyToBounds(mutation.payload, false);
         }
         this.resetClusterLayer();
       }
@@ -382,7 +382,7 @@ export default {
       }
       return additionalSettings;
     },
-    flyToBounds(poi) {
+    flyToBounds(poi, animate = true) {
       // zooms to subaoi if present or area around aoi if not
       const boundsPad = 0.15;
       if (poi.subAoi && poi.subAoi.features.length > 0) {
@@ -390,13 +390,13 @@ export default {
         const cornerMax1 = latLng([bounds.getSouth() - boundsPad, bounds.getWest() - boundsPad]);
         const cornerMax2 = latLng([bounds.getNorth() + boundsPad, bounds.getEast() + boundsPad]);
         const boundsMax = latLngBounds(cornerMax1, cornerMax2);
-        this.map.flyToBounds(bounds);
+        this.map.flyToBounds(bounds, { animate });
       } else if (poi.aoi) {
         const cornerMax1 = latLng([poi.aoi.lat - boundsPad, poi.aoi.lng - boundsPad]);
         const cornerMax2 = latLng([poi.aoi.lat + boundsPad, poi.aoi.lng + boundsPad]);
         const boundsMax = latLngBounds(cornerMax1, cornerMax2);
         this.map.setZoom(18);
-        this.map.flyTo(poi.aoi);
+        this.map.flyTo(poi.aoi, { animate });
         if (this.indicatorsDefinition[poi.indicator].largeSubAoi) {
           this.map.setMinZoom(2);
         } else {
@@ -408,7 +408,7 @@ export default {
       } else if (poi.aoiID === 'World') {
         this.map.flyToBounds([
           [-90,-180], [90,180]
-        ]);
+        ], { animate });
       } else {
         // zoom to default bbox from config
         // this.map.setMinZoom(this.mapDefaults.minMapZoom);
